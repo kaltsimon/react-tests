@@ -3,9 +3,9 @@ import * as Remarkable from 'remarkable';
 import * as $ from 'jquery';
 
 export interface CommentProps {
-    id:number;
-    author:string;
-    text:string;
+    id?:number;
+    author?:string;
+    text?:string;
 }
 
 interface CommentData {
@@ -38,6 +38,11 @@ export class CommentBox extends React.Component<API, CommentData> {
         });
     }
 
+    private handleCommentSubmit(comment:CommentProps) {
+        console.log('Submitting comment', comment);
+        // TODO: Send request to server
+    }
+
     componentDidMount() {
         this.updateComments();
         setInterval(this.updateComments.bind(this), this.props.pollInterval);
@@ -49,7 +54,7 @@ export class CommentBox extends React.Component<API, CommentData> {
             <div className="comment-box">
                 <h1>Comments</h1>
                 <CommentList data={this.state.data} />
-                <CommentForm />
+                <CommentForm onCommentSubmit={this.handleCommentSubmit.bind(this)} />
             </div>
         );
     }
@@ -87,12 +92,48 @@ export class Comment extends React.Component<CommentPropsInternal, {}> {
     }
 }
 
-export class CommentForm extends React.Component<{}, {}> {
+export class CommentForm extends React.Component<{onCommentSubmit:(props:CommentProps) => void}, CommentProps> {
+    constructor(props:any, context:CommentProps) {
+        super(props, context);
+        this.state = {
+            author: '',
+            text: ''
+        };
+    }
+
+    handleAuthorChange(event:React.FormEvent) {
+        this.setState({author: event.target.value});
+    }
+
+    handleTextChange(event:React.FormEvent) {
+        this.setState({text: event.target.value});
+    }
+
+    handleSubmit(event:React.FormEvent) {
+        event.preventDefault();
+        let author = this.state.author.trim();
+        let text = this.state.text.trim();
+        if (!text || !author) {
+            return;
+        }
+
+        this.props.onCommentSubmit({author, text});
+
+        this.setState({ author: '', text: '' });
+    }
+
     render() {
         return (
-            <form className="comment-form">
-                <input type="text" placeholder="Your name" />
-                <input type="text" placeholder="Say something..." />
+            <form className="comment-form" onSubmit={this.handleSubmit.bind(this)}>
+                <input type="text"
+                    placeholder="Your name"
+                    value={this.state.author}
+                    onChange={this.handleAuthorChange.bind(this)}
+                />
+                <input type="text"
+                    placeholder="Say something..."
+                    value={this.state.text}
+                    onChange={this.handleTextChange.bind(this)} />
                 <input type="submit" value="Post" />
             </form>
         );
