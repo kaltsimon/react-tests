@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Remarkable from 'remarkable';
+import * as $ from 'jquery';
 
 export interface CommentProps {
     id:number;
@@ -16,12 +17,32 @@ interface CommentPropsInternal {
     key:number;
 }
 
-export class CommentBox extends React.Component<CommentData, {}> {
+interface API {
+    url:string;
+}
+
+export class CommentBox extends React.Component<API, CommentData> {
+    constructor(props:API, context:CommentData) {
+        super(props, context);
+        this.state = {data:[]};
+    }
+
+    componentDidMount() {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            cache: false,
+            success: (data) => this.setState({data: data}),
+            error: (xhr, status, err) => console.error(this.props.url, status, err.toString())
+        });
+    }
+
+
     render() {
         return (
             <div className="comment-box">
                 <h1>Comments</h1>
-                <CommentList data={this.props.data} />
+                <CommentList data={this.state.data} />
                 <CommentForm />
             </div>
         );
@@ -64,7 +85,6 @@ export class CommentForm extends React.Component<{}, {}> {
     render() {
         return (
             <div className="comment-form">
-                Hello, I'm a CommentForm.
             </div>
         );
     }

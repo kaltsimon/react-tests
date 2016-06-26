@@ -19,6 +19,7 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
+    "jquery": "^3.0.0",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "remarkable": "^1.6.2"

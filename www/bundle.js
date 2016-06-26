@@ -52,11 +52,7 @@
 	(function (App) {
 	    var Main = (function () {
 	        function Main() {
-	            this.data = [
-	                { id: 1, author: "Pete Hunt", text: "This is a _comment_." },
-	                { id: 2, author: "Jordan Walke", text: "This is *another* comment" }
-	            ];
-	            ReactDOM.render(React.createElement(Comments_1.CommentBox, {data: this.data}), document.getElementById('react-app'));
+	            ReactDOM.render(React.createElement(Comments_1.CommentBox, {url: "/data/comments.json"}), document.getElementById('react-app'));
 	        }
 	        return Main;
 	    }());
@@ -93,13 +89,25 @@
 	};
 	var React = __webpack_require__(1);
 	var Remarkable = __webpack_require__(4);
+	var $ = __webpack_require__(5);
 	var CommentBox = (function (_super) {
 	    __extends(CommentBox, _super);
-	    function CommentBox() {
-	        _super.apply(this, arguments);
+	    function CommentBox(props, context) {
+	        _super.call(this, props, context);
+	        this.state = { data: [] };
 	    }
+	    CommentBox.prototype.componentDidMount = function () {
+	        var _this = this;
+	        $.ajax({
+	            url: this.props.url,
+	            dataType: 'json',
+	            cache: false,
+	            success: function (data) { return _this.setState({ data: data }); },
+	            error: function (xhr, status, err) { return console.error(_this.props.url, status, err.toString()); }
+	        });
+	    };
 	    CommentBox.prototype.render = function () {
-	        return (React.createElement("div", {className: "comment-box"}, React.createElement("h1", null, "Comments"), React.createElement(CommentList, {data: this.props.data}), React.createElement(CommentForm, null)));
+	        return (React.createElement("div", {className: "comment-box"}, React.createElement("h1", null, "Comments"), React.createElement(CommentList, {data: this.state.data}), React.createElement(CommentForm, null)));
 	    };
 	    return CommentBox;
 	}(React.Component));
@@ -138,7 +146,7 @@
 	        _super.apply(this, arguments);
 	    }
 	    CommentForm.prototype.render = function () {
-	        return (React.createElement("div", {className: "comment-form"}, "Hello, I'm a CommentForm."));
+	        return (React.createElement("div", {className: "comment-form"}));
 	    };
 	    return CommentForm;
 	}(React.Component));
@@ -150,6 +158,12 @@
 /***/ function(module, exports) {
 
 	module.exports = Remarkable;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	module.exports = $;
 
 /***/ }
 /******/ ]);
