@@ -52,7 +52,7 @@
 	(function (App) {
 	    var Main = (function () {
 	        function Main() {
-	            ReactDOM.render(React.createElement(Comments_1.CommentBox, {url: "/data/comments.json"}), document.getElementById('react-app'));
+	            ReactDOM.render(React.createElement(Comments_1.CommentBox, {url: "/data/comments.json", pollInterval: 2000}), document.getElementById('react-app'));
 	        }
 	        return Main;
 	    }());
@@ -96,7 +96,7 @@
 	        _super.call(this, props, context);
 	        this.state = { data: [] };
 	    }
-	    CommentBox.prototype.componentDidMount = function () {
+	    CommentBox.prototype.updateComments = function () {
 	        var _this = this;
 	        $.ajax({
 	            url: this.props.url,
@@ -105,6 +105,10 @@
 	            success: function (data) { return _this.setState({ data: data }); },
 	            error: function (xhr, status, err) { return console.error(_this.props.url, status, err.toString()); }
 	        });
+	    };
+	    CommentBox.prototype.componentDidMount = function () {
+	        this.updateComments();
+	        setInterval(this.updateComments.bind(this), this.props.pollInterval);
 	    };
 	    CommentBox.prototype.render = function () {
 	        return (React.createElement("div", {className: "comment-box"}, React.createElement("h1", null, "Comments"), React.createElement(CommentList, {data: this.state.data}), React.createElement(CommentForm, null)));

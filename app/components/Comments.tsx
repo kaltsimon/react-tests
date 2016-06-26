@@ -19,6 +19,7 @@ interface CommentPropsInternal {
 
 interface API {
     url:string;
+    pollInterval:number;
 }
 
 export class CommentBox extends React.Component<API, CommentData> {
@@ -27,7 +28,7 @@ export class CommentBox extends React.Component<API, CommentData> {
         this.state = {data:[]};
     }
 
-    componentDidMount() {
+    private updateComments() {
         $.ajax({
             url: this.props.url,
             dataType: 'json',
@@ -35,6 +36,11 @@ export class CommentBox extends React.Component<API, CommentData> {
             success: (data) => this.setState({data: data}),
             error: (xhr, status, err) => console.error(this.props.url, status, err.toString())
         });
+    }
+
+    componentDidMount() {
+        this.updateComments();
+        setInterval(this.updateComments.bind(this), this.props.pollInterval);
     }
 
 

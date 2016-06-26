@@ -7,7 +7,7 @@ namespace App {
     export class Main {
         constructor() {
             ReactDOM.render(
-                <CommentBox url="/data/comments.json" />,
+                <CommentBox url="/data/comments.json" pollInterval={2000} />,
                 document.getElementById('react-app')
             );
         }
