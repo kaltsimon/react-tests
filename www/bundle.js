@@ -47,12 +47,16 @@
 	"use strict";
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
-	var Hello_1 = __webpack_require__(3);
+	var Comments_1 = __webpack_require__(3);
 	var App;
 	(function (App) {
 	    var Main = (function () {
 	        function Main() {
-	            ReactDOM.render(React.createElement(Hello_1.Hello, {compiler: "Typescript", framework: "React"}), document.getElementById('react-app'));
+	            this.data = [
+	                { id: 1, author: "Pete Hunt", text: "This is a _comment_." },
+	                { id: 2, author: "Jordan Walke", text: "This is *another* comment" }
+	            ];
+	            ReactDOM.render(React.createElement(Comments_1.CommentBox, {data: this.data}), document.getElementById('react-app'));
 	        }
 	        return Main;
 	    }());
@@ -88,18 +92,64 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(1);
-	var Hello = (function (_super) {
-	    __extends(Hello, _super);
-	    function Hello() {
+	var Remarkable = __webpack_require__(4);
+	var CommentBox = (function (_super) {
+	    __extends(CommentBox, _super);
+	    function CommentBox() {
 	        _super.apply(this, arguments);
 	    }
-	    Hello.prototype.render = function () {
-	        return React.createElement("h1", null, "Hello from ", this.props.compiler, " and ", this.props.framework, "!");
+	    CommentBox.prototype.render = function () {
+	        return (React.createElement("div", {className: "comment-box"}, React.createElement("h1", null, "Comments"), React.createElement(CommentList, {data: this.props.data}), React.createElement(CommentForm, null)));
 	    };
-	    return Hello;
+	    return CommentBox;
 	}(React.Component));
-	exports.Hello = Hello;
+	exports.CommentBox = CommentBox;
+	var CommentList = (function (_super) {
+	    __extends(CommentList, _super);
+	    function CommentList() {
+	        _super.apply(this, arguments);
+	    }
+	    CommentList.prototype.render = function () {
+	        var commentNodes = this.props.data.map(function (comment) { return (React.createElement(Comment, {author: comment.author, key: comment.id}, comment.text)); });
+	        return (React.createElement("div", {className: "comment-list"}, commentNodes));
+	    };
+	    return CommentList;
+	}(React.Component));
+	exports.CommentList = CommentList;
+	var Comment = (function (_super) {
+	    __extends(Comment, _super);
+	    function Comment() {
+	        _super.apply(this, arguments);
+	    }
+	    Comment.prototype.rawMarkup = function () {
+	        var md = new Remarkable();
+	        var rawMarkup = md.render(this.props.children.toString());
+	        return { __html: rawMarkup };
+	    };
+	    Comment.prototype.render = function () {
+	        return (React.createElement("div", {className: "comment"}, React.createElement("h2", {className: "comment-author"}, this.props.author), React.createElement("span", {dangerouslySetInnerHTML: this.rawMarkup()})));
+	    };
+	    return Comment;
+	}(React.Component));
+	exports.Comment = Comment;
+	var CommentForm = (function (_super) {
+	    __extends(CommentForm, _super);
+	    function CommentForm() {
+	        _super.apply(this, arguments);
+	    }
+	    CommentForm.prototype.render = function () {
+	        return (React.createElement("div", {className: "comment-form"}, "Hello, I'm a CommentForm."));
+	    };
+	    return CommentForm;
+	}(React.Component));
+	exports.CommentForm = CommentForm;
 
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	module.exports = Remarkable;
 
 /***/ }
 /******/ ]);
