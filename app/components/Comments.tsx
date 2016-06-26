@@ -90,8 +90,11 @@ export class Comment extends React.Component<CommentPropsInternal, {}> {
 export class CommentForm extends React.Component<{}, {}> {
     render() {
         return (
-            <div className="comment-form">
-            </div>
+            <form className="comment-form">
+                <input type="text" placeholder="Your name" />
+                <input type="text" placeholder="Say something..." />
+                <input type="submit" value="Post" />
+            </form>
         );
     }
 }

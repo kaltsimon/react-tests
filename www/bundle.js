@@ -150,7 +150,7 @@
 	        _super.apply(this, arguments);
 	    }
 	    CommentForm.prototype.render = function () {
-	        return (React.createElement("div", {className: "comment-form"}));
+	        return (React.createElement("form", {className: "comment-form"}, React.createElement("input", {type: "text", placeholder: "Your name"}), React.createElement("input", {type: "text", placeholder: "Say something..."}), React.createElement("input", {type: "submit", value: "Post"})));
 	    };
 	    return CommentForm;
 	}(React.Component));
