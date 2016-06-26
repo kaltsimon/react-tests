@@ -16,7 +16,7 @@ var params = {
     // host: "0.0.0.0", // Set the address to bind to. Defaults to 0.0.0.0 or process.env.IP.
     root: "www/", // Set root directory that's being served. Defaults to cwd.
     open: true, // When false, it won't load your browser by default.
-    ignore: '', // comma-separated string for paths to ignore
+    ignore: ['./www/data'], // comma-separated string for paths to ignore
     file: "index.html", // When set, serve this file for every 404 (useful for single-page applications)
     wait: 500, // Waits for all changes, before reloading. Defaults to 0 sec.
     mount: [['/node_modules', './node_modules']], // Mount a directory to a route.
